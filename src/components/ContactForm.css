@@ -1,0 +1,68 @@
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid white;
+    padding: 5px;
+    position: relative;
+    padding-bottom: 40px; 
+}
+
+.input-field {
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.contact-form input {
+    padding: 10px;
+    border: 1px solid white;
+    width: 200px;
+}
+
+.contact-form .clear-button {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 255, 34, 0.616);
+    color: wheat;
+    padding: 5px;
+    border: none;
+    cursor: pointer;
+    width: 30px;
+}
+
+.contact-form .save-button {
+    background-color: #001aff;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 15px;
+    width: 70px;
+    cursor: pointer;
+    margin-top: 65px;
+    margin-right: 20px; 
+}
+
+.contact-form .delete-button {
+    background-color: #1100ff;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 15px;
+    width: 70px;
+    cursor: pointer;
+    margin-top: 60px;
+}
+
+.contact-form button:hover {
+    filter: brightness(1.2);
+}
+
+.contact-form input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(255, 38, 0, 0.5);
+}
+.contact-form {
+    min-height: 300px; /* Пример фиксированной минимальной высоты */
+}
