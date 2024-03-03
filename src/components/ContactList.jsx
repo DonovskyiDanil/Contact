@@ -1,44 +1,67 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import ContactForm from './ContactForm';
 import './ContactList.css';
 
 const ContactList = () => {
-  const [contacts, setContacts] = useState(JSON.parse(localStorage.getItem('contacts')) || []);
+  const [contacts, setContacts] = useState([]);
   const [currentContact, setCurrentContact] = useState(null);
   const [formKey, setFormKey] = useState(0);
 
   useEffect(() => {
-    localStorage.setItem('contacts', JSON.stringify(contacts));
-  }, [contacts]);
+    const fetchContacts = async () => {
+      try {
+        const response = await axios.get('http://localhost:3001/contacts');
+        setContacts(response.data);
+      } catch (error) {
+        console.error("Ошибка при получении контактов:", error);
+      }
+    };
 
-  const addContact = (contact) => {
-    let updatedContacts = [];
-    if (currentContact) {
-      updatedContacts = contacts.map(c => c.id === contact.id ? contact : c);
+    fetchContacts();
+  }, []);
+
+  const addOrUpdateContact = async (contactData) => {
+    if (contactData.id) {
+      try {
+        await axios.put(`http://localhost:3001/contacts/${contactData.id}`, contactData);
+      } catch (error) {
+        console.error("Ошибка при обновлении контакта:", error);
+      }
     } else {
-      const newContact = { ...contact, id: Date.now() };
-      updatedContacts = [...contacts, newContact];
+      try {
+        await axios.post('http://localhost:3001/contacts', contactData);
+      } catch (error) {
+        console.error("Ошибка при добавлении контакта:", error);
+      }
     }
 
-    setContacts(updatedContacts);
+    const response = await axios.get('http://localhost:3001/contacts');
+    setContacts(response.data);
     setCurrentContact(null);
-    setFormKey(formKey + 1);
+    setFormKey(prevKey => prevKey + 1);
   };
 
-  const deleteContact = (id) => {
-    setContacts(contacts.filter(contact => contact.id !== id));
-    setCurrentContact(null);
-    setFormKey(formKey + 1);
+
+  const deleteContact = async (id) => {
+    try {
+      await axios.delete(`http://localhost:3001/contacts/${id}`);
+      setContacts(contacts.filter(contact => contact.id !== id));
+      setCurrentContact(null);
+      setFormKey(prevKey => prevKey + 1);
+    } catch (error) {
+      console.error("Ошибка при удалении контакта:", error);
+    }
   };
 
   const selectContact = (contact) => {
     setCurrentContact(contact);
-    setFormKey(formKey + 1);
+    setFormKey(prevKey => prevKey + 1);
   };
 
   const resetForm = () => {
     setCurrentContact(null);
-    setFormKey(formKey + 1);
+    setFormKey(prevKey => prevKey + 1);
   };
 
   return (
@@ -47,20 +70,9 @@ const ContactList = () => {
       <div className="contacts-wrapper">
         <div className="contacts-left">
           {contacts.map((contact) => (
-            <div
-              key={contact.id}
-              className="contact-item"
-              onDoubleClick={() => selectContact(contact)} 
-            >
-              <input
-                type="text"
-                value={`${contact.firstName} ${contact.lastName}`}
-                readOnly
-              />
-              <button onClick={(event) => {
-                event.stopPropagation(); 
-                deleteContact(contact.id);
-              }}>X</button>
+            <div key={contact.id} className="contact-item" onDoubleClick={() => selectContact(contact)}>
+              <input type="text" value={`${contact.firstName} ${contact.lastName}`} readOnly />
+              <button onClick={() => deleteContact(contact.id)}>X</button>
             </div>
           ))}
           <button type="button" className="new-button" onClick={resetForm}>New</button>
@@ -69,7 +81,7 @@ const ContactList = () => {
           <ContactForm
             key={formKey}
             currentContact={currentContact}
-            onSave={addContact}
+            onSave={addOrUpdateContact}
             onDelete={deleteContact}
           />
         </div>

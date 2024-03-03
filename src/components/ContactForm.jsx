@@ -1,22 +1,24 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import './ContactForm.css';
 
-const ContactForm = ({ currentContact, onSave, onDelete }) => {
+const apiClient = axios.create({
+  baseURL: 'http://localhost:3001'
+});
+
+const ContactForm = ({ currentContact, updateContacts }) => {
     const [contact, setContact] = useState({
-        firstName: currentContact ? currentContact.firstName : '',
-        lastName: currentContact ? currentContact.lastName : '',
-        email: currentContact ? currentContact.email : '',
-        phone: currentContact ? currentContact.phone : '',
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
     });
 
     useEffect(() => {
         if (currentContact) {
-            setContact({
-                firstName: currentContact.firstName,
-                lastName: currentContact.lastName,
-                email: currentContact.email,
-                phone: currentContact.phone,
-            });
+            setContact(currentContact);
+        } else {
+            resetFormAll();
         }
     }, [currentContact]);
 
@@ -27,16 +29,18 @@ const ContactForm = ({ currentContact, onSave, onDelete }) => {
         });
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        const contactData = {
-            ...contact,
-            id: currentContact ? currentContact.id : undefined,
-        };
-
-        if (onSave) {
-            onSave(contactData);
-            resetFormAll();
+        try {
+            if (contact.id) {
+                await apiClient.put(`/contacts/${contact.id}`, contact);
+            } else {
+                await apiClient.post('/contacts', contact);
+            }
+            updateContacts();
+            resetFormAll();  
+        } catch (error) {
+            console.error("Ошибка при сохранении контакта:", error);
         }
     };
 
@@ -49,51 +53,46 @@ const ContactForm = ({ currentContact, onSave, onDelete }) => {
         });
     };
 
-    const resetField = (fieldName) => {
-        setContact({
-            ...contact,
-            [fieldName]: '',
-        });
-    };
-
-    const handleDelete = () => {
-        if (currentContact && onDelete) {
-            onDelete(currentContact.id);
-            resetFormAll();
-        }
-    };
-
     return (
         <form onSubmit={handleSubmit} className="contact-form">
-            {['firstName', 'lastName', 'email', 'phone'].map((field) => (
-                <div key={field} className="input-field">
-                    <input 
-                        type="text" 
-                        name={field} 
-                        value={contact[field]} 
-                        onChange={handleChange} 
-                        placeholder={field.charAt(0).toUpperCase() + field.slice(1)} 
-                    />
-                    <button 
-                        type="button" 
-                        className='clear-button' 
-                        onClick={() => resetField(field)}
-                    >
-                        X
-                    </button>
-                </div>
-            ))}
+            <div className="input-field">
+                <input 
+                    type="text" 
+                    name="firstName" 
+                    value={contact.firstName} 
+                    onChange={handleChange} 
+                    placeholder="First Name" 
+                />
+            </div>
+            <div className="input-field">
+                <input 
+                    type="text" 
+                    name="lastName" 
+                    value={contact.lastName} 
+                    onChange={handleChange} 
+                    placeholder="Last Name" 
+                />
+            </div>
+            <div className="input-field">
+                <input 
+                    type="email" 
+                    name="email" 
+                    value={contact.email} 
+                    onChange={handleChange} 
+                    placeholder="Email" 
+                />
+            </div>
+            <div className="input-field">
+                <input 
+                    type="tel" 
+                    name="phone" 
+                    value={contact.phone} 
+                    onChange={handleChange} 
+                    placeholder="Phone" 
+                />
+            </div>
             <div className="form-buttons">
                 <button type="submit" className="save-button">Save</button>
-                {currentContact && (
-                    <button 
-                        type="button" 
-                        className="delete-button" 
-                        onClick={handleDelete}
-                    >
-                        Delete
-                    </button>
-                )}
             </div>
         </form>
     );
