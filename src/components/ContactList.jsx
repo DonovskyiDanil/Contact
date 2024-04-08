@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ContactForm from './ContactForm';
+import ContactItem from './ContactItem'; // Импортируем ContactItem
 import './ContactList.css';
 
 class ContactList extends Component {
@@ -53,21 +54,12 @@ class ContactList extends Component {
         <div className="contacts-wrapper">
           <div className="contacts-left">
             {this.state.contacts.map((contact) => (
-              <div
+              <ContactItem
                 key={contact.id}
-                className="contact-item"
-                onDoubleClick={() => this.selectContact(contact)} // Активация по двойному клику
-              >
-                <input
-                  type="text"
-                  value={`${contact.firstName} ${contact.lastName}`}
-                  readOnly
-                />
-                <button onClick={(event) => {
-                  event.stopPropagation(); // Предотвращаем всплытие события клика
-                  this.deleteContact(contact.id);
-                }}>X</button>
-              </div>
+                contact={contact}
+                onSelect={this.selectContact}
+                onDelete={this.deleteContact}
+              />
             ))}
             <button type="button" className="new-button" onClick={this.resetForm}>New</button>
           </div>
@@ -83,6 +75,6 @@ class ContactList extends Component {
       </div>
     );
   }
-} // Закрывающая фигурная скобка для класса компонента
+}
 
-export default ContactList; // Экспорт компонента
+export default ContactList;
