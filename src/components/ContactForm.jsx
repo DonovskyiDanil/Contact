@@ -1,102 +1,123 @@
 import React, { useState, useEffect } from 'react';
 import './ContactForm.css';
 
-const ContactForm = ({ currentContact, onSave, onDelete }) => {
-    const [contact, setContact] = useState({
-        firstName: currentContact ? currentContact.firstName : '',
-        lastName: currentContact ? currentContact.lastName : '',
-        email: currentContact ? currentContact.email : '',
-        phone: currentContact ? currentContact.phone : '',
+function ContactForm({ contactForEdit, onSubmit, onDelete }) {
+  const [contact, setContact] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    id: null
+  });
+
+  useEffect(() => {
+    setContact(contactForEdit || {
+      firstName: '',
+      lastName: '',
+      email: '',
+      phone: '',
+      id: null
     });
+  }, [contactForEdit]);
 
-    useEffect(() => {
-        if (currentContact) {
-            setContact({
-                firstName: currentContact.firstName,
-                lastName: currentContact.lastName,
-                email: currentContact.email,
-                phone: currentContact.phone,
-            });
-        }
-    }, [currentContact]);
+  const createEmptyContact = () => ({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    id: null
+  });
 
-    const handleChange = (event) => {
-        setContact({
-            ...contact,
-            [event.target.name]: event.target.value,
-        });
-    };
+  const onInputChange = (e) => {
+    setContact((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }));
+  };
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        const contactData = {
-            ...contact,
-            id: currentContact ? currentContact.id : undefined,
-        };
+  const onClearField = (e) => {
+    const fieldName = e.target.previousSibling.name; 
+    setContact((prev) => ({
+      ...prev,
+      [fieldName]: ''
+    }));
+  };
 
-        if (onSave) {
-            onSave(contactData);
-            resetFormAll();
-        }
-    };
+  const onFormSubmit = (e) => {
+    e.preventDefault();
+    onSubmit(contact);
+    setContact(createEmptyContact());
+  };
 
-    const resetFormAll = () => {
-        setContact({
-            firstName: '',
-            lastName: '',
-            email: '',
-            phone: '',
-        });
-    };
+  const onContactDelete = () => {
+    onDelete(contact.id);
+    setContact(createEmptyContact());
+  };
 
-    const resetField = (fieldName) => {
-        setContact({
-            ...contact,
-            [fieldName]: '',
-        });
-    };
-
-    const handleDelete = () => {
-        if (currentContact && onDelete) {
-            onDelete(currentContact.id);
-            resetFormAll();
-        }
-    };
-
-    return (
-        <form onSubmit={handleSubmit} className="contact-form">
-            {['firstName', 'lastName', 'email', 'phone'].map((field) => (
-                <div key={field} className="input-field">
-                    <input 
-                        type="text" 
-                        name={field} 
-                        value={contact[field]} 
-                        onChange={handleChange} 
-                        placeholder={field.charAt(0).toUpperCase() + field.slice(1)} 
-                    />
-                    <button 
-                        type="button" 
-                        className='clear-button' 
-                        onClick={() => resetField(field)}
-                    >
-                        X
-                    </button>
-                </div>
-            ))}
-            <div className="form-buttons">
-                <button type="submit" className="save-button">Save</button>
-                {currentContact && (
-                    <button 
-                        type="button" 
-                        className="delete-button" 
-                        onClick={handleDelete}
-                    >
-                        Delete
-                    </button>
-                )}
-            </div>
-        </form>
-    );
-};
+  return (
+    <form id="contact-form" onSubmit={onFormSubmit}>
+      <div className='form-container'>
+        <div className='contact-info'>
+          <input
+            type='text'
+            className='text-field'
+            placeholder='First Name'
+            name='firstName'
+            value={contact.firstName}
+            onChange={onInputChange}
+          />
+          <span className='clear' onClick={onClearField}>X</span>
+        </div>
+        <div className='contact-info'>
+          <input
+            type='text'
+            className='text-field'
+            placeholder='Last Name'
+            name='lastName'
+            value={contact.lastName}
+            onChange={onInputChange}
+          />
+          <span className='clear' onClick={onClearField}>X</span>
+        </div>
+        <div className='contact-info'>
+          <input
+            type='text'
+            className='text-field'
+            placeholder='Email'
+            name='email'
+            value={contact.email}
+            onChange={onInputChange}
+          />
+          <span className='clear' onClick={onClearField}>X</span>
+        </div>
+        <div className='contact-info'>
+          <input
+            type='text'
+            className='text-field'
+            placeholder='Phone'
+            name='phone'
+            value={contact.phone}
+            onChange={onInputChange}
+          />
+          <span className='clear' onClick={onClearField}>X</span>
+        </div>
+        <div className='btns'>
+          <button id='save' type='submit'>
+            Save
+          </button>
+          {contact.id ? (
+            <button
+              id='delete'
+              type='button'
+              onClick={onContactDelete}
+            >
+              Delete
+            </button>
+          ) : null}
+        </div>
+      </div>
+    </form>
+  );
+}
 
 export default ContactForm;

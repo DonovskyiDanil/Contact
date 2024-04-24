@@ -7,31 +7,26 @@
     padding-bottom: 40px; 
 }
 
-.input-field {
+
+.contact-info {
     position: relative;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 }
-
-.contact-form input {
+.contact-info input{
+    flex-grow: 1;
+    margin-bottom: -15px;
     padding: 10px;
-    border: 1px solid white;
-    width: 200px;
+    width: 200px; 
 }
 
-.contact-form .clear-button {
-    position: absolute;
-    right: 5px;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: rgba(0, 255, 34, 0.616);
-    color: wheat;
-    padding: 5px;
-    border: none;
-    cursor: pointer;
-    width: 30px;
+.contact-form .text-field {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    box-sizing: border-box;
 }
-
-.contact-form .save-button {
+#delete {
     background-color: #001aff;
     color: white;
     padding: 10px;
@@ -39,30 +34,34 @@
     border-radius: 15px;
     width: 70px;
     cursor: pointer;
-    margin-top: 65px;
-    margin-right: 20px; 
+    margin-top: 150px;
+    margin-right: 20px;
 }
 
-.contact-form .delete-button {
-    background-color: #1100ff;
+#save {
+    background-color: #001aff;
     color: white;
     padding: 10px;
     border: none;
     border-radius: 15px;
     width: 70px;
     cursor: pointer;
-    margin-top: 60px;
+    margin-top: 120px;
+    margin-right: 20px;
 }
 
-.contact-form button:hover {
-    filter: brightness(1.2);
-}
 
-.contact-form input:focus {
-    outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 5px rgba(255, 38, 0, 0.5);
-}
-.contact-form {
-    min-height: 300px; /* Пример фиксированной минимальной высоты */
-}
+.clear {
+    position: absolute;
+    right: 5px;
+    top: 60%;
+    transform: translateY(-40%);
+    background-color: rgba(0, 255, 94, 0.616);
+    color: black;
+    padding: 4px;
+    border: none;
+    cursor: pointer;
+    width: 20px;
+    text-align: center;
+ }
+    

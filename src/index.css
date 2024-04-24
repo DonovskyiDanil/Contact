@@ -1,15 +1,15 @@
 body {
   display: flex;
-  flex-direction: column; /* Элементы выстраиваются в колонку */
-  justify-content: center; /* Горизонтальное центрирование */
-  align-items: center; /* Вертикальное центрирование */
-  margin: 0; /* Убираем стандартные отступы */
-  background-color: rgb(238, 233, 158); /* Цвет фона */
+  flex-direction: column; 
+  justify-content: center; 
+  align-items: center; 
+  margin: 0; 
+  background-color: rgb(238, 233, 158); 
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif; /* Шрифт */
-  -webkit-font-smoothing: antialiased; /* Сглаживание шрифта для WebKit браузеров */
-  -moz-osx-font-smoothing: grayscale; /* Сглаживание шрифта для Firefox на macOS */
+    sans-serif; 
+  -webkit-font-smoothing: antialiased; 
+  -moz-osx-font-smoothing: grayscale; 
 }
 
  code {
