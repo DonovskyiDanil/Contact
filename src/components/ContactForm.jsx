@@ -2,24 +2,6 @@ import React, { useState, useEffect } from 'react';
 import './ContactForm.css';
 
 function ContactForm({ contactForEdit, onSubmit, onDelete }) {
-  const [contact, setContact] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    id: null
-  });
-
-  useEffect(() => {
-    setContact(contactForEdit || {
-      firstName: '',
-      lastName: '',
-      email: '',
-      phone: '',
-      id: null
-    });
-  }, [contactForEdit]);
-
   const createEmptyContact = () => ({
     firstName: '',
     lastName: '',
@@ -28,8 +10,14 @@ function ContactForm({ contactForEdit, onSubmit, onDelete }) {
     id: null
   });
 
+  const [contact, setContact] = useState(createEmptyContact());
+
+  useEffect(() => {
+    setContact(contactForEdit || createEmptyContact());
+  }, [contactForEdit]);
+
   const onInputChange = (e) => {
-    setContact((prev) => ({
+    setContact(prev => ({
       ...prev,
       [e.target.name]: e.target.value
     }));
@@ -37,7 +25,7 @@ function ContactForm({ contactForEdit, onSubmit, onDelete }) {
 
   const onClearField = (e) => {
     const fieldName = e.target.previousSibling.name; 
-    setContact((prev) => ({
+    setContact(prev => ({
       ...prev,
       [fieldName]: ''
     }));
@@ -47,7 +35,7 @@ function ContactForm({ contactForEdit, onSubmit, onDelete }) {
     e.preventDefault();
     onSubmit(contact);
     setContact(createEmptyContact());
-  };
+  };  // Закрывающая фигурная скобка добавлена для исправления синтаксиса
 
   const onContactDelete = () => {
     onDelete(contact.id);
@@ -105,7 +93,7 @@ function ContactForm({ contactForEdit, onSubmit, onDelete }) {
           <button id='save' type='submit'>
             Save
           </button>
-          {contact.id ? (
+          {contact.id && (
             <button
               id='delete'
               type='button'
@@ -113,7 +101,7 @@ function ContactForm({ contactForEdit, onSubmit, onDelete }) {
             >
               Delete
             </button>
-          ) : null}
+          )}
         </div>
       </div>
     </form>
