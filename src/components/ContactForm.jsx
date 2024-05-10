@@ -1,101 +1,111 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import './ContactForm.css';
 
-const apiClient = axios.create({
-  baseURL: 'http://localhost:3001'
-});
+function ContactForm({ contactForEdit, onSubmit, onDelete }) {
+  const createEmptyContact = () => ({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    id: null
+  });
 
-const ContactForm = ({ currentContact, updateContacts }) => {
-    const [contact, setContact] = useState({
-        firstName: '',
-        lastName: '',
-        email: '',
-        phone: '',
-    });
+  const [contact, setContact] = useState(createEmptyContact());
 
-    useEffect(() => {
-        if (currentContact) {
-            setContact(currentContact);
-        } else {
-            resetFormAll();
-        }
-    }, [currentContact]);
+  useEffect(() => {
+    setContact(contactForEdit || createEmptyContact());
+  }, [contactForEdit]);
 
-    const handleChange = (event) => {
-        setContact({
-            ...contact,
-            [event.target.name]: event.target.value,
-        });
-    };
+  const onInputChange = (e) => {
+    setContact(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }));
+  };
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        try {
-            if (contact.id) {
-                await apiClient.put(`/contacts/${contact.id}`, contact);
-            } else {
-                await apiClient.post('/contacts', contact);
-            }
-            updateContacts();
-            resetFormAll();  
-        } catch (error) {
-            console.error("Ошибка при сохранении контакта:", error);
-        }
-    };
+  const onClearField = (e) => {
+    const fieldName = e.target.previousSibling.name; 
+    setContact(prev => ({
+      ...prev,
+      [fieldName]: ''
+    }));
+  };
 
-    const resetFormAll = () => {
-        setContact({
-            firstName: '',
-            lastName: '',
-            email: '',
-            phone: '',
-        });
-    };
+  const onFormSubmit = (e) => {
+    e.preventDefault();
+    onSubmit(contact);
+    setContact(createEmptyContact());
+  };  
 
-    return (
-        <form onSubmit={handleSubmit} className="contact-form">
-            <div className="input-field">
-                <input 
-                    type="text" 
-                    name="firstName" 
-                    value={contact.firstName} 
-                    onChange={handleChange} 
-                    placeholder="First Name" 
-                />
-            </div>
-            <div className="input-field">
-                <input 
-                    type="text" 
-                    name="lastName" 
-                    value={contact.lastName} 
-                    onChange={handleChange} 
-                    placeholder="Last Name" 
-                />
-            </div>
-            <div className="input-field">
-                <input 
-                    type="email" 
-                    name="email" 
-                    value={contact.email} 
-                    onChange={handleChange} 
-                    placeholder="Email" 
-                />
-            </div>
-            <div className="input-field">
-                <input 
-                    type="tel" 
-                    name="phone" 
-                    value={contact.phone} 
-                    onChange={handleChange} 
-                    placeholder="Phone" 
-                />
-            </div>
-            <div className="form-buttons">
-                <button type="submit" className="save-button">Save</button>
-            </div>
-        </form>
-    );
-};
+  const onContactDelete = () => {
+    onDelete(contact.id);
+    setContact(createEmptyContact());
+  };
+
+  return (
+    <form id="contact-form" onSubmit={onFormSubmit}>
+      <div className='form-container'>
+        <div className='contact-info'>
+          <input
+            type='text'
+            className='text-field'
+            placeholder='First Name'
+            name='firstName'
+            value={contact.firstName}
+            onChange={onInputChange}
+          />
+          <span className='clear' onClick={onClearField}>X</span>
+        </div>
+        <div className='contact-info'>
+          <input
+            type='text'
+            className='text-field'
+            placeholder='Last Name'
+            name='lastName'
+            value={contact.lastName}
+            onChange={onInputChange}
+          />
+          <span className='clear' onClick={onClearField}>X</span>
+        </div>
+        <div className='contact-info'>
+          <input
+            type='text'
+            className='text-field'
+            placeholder='Email'
+            name='email'
+            value={contact.email}
+            onChange={onInputChange}
+          />
+          <span className='clear' onClick={onClearField}>X</span>
+        </div>
+        <div className='contact-info'>
+          <input
+            type='text'
+            className='text-field'
+            placeholder='Phone'
+            name='phone'
+            value={contact.phone}
+            onChange={onInputChange}
+          />
+          <span className='clear' onClick={onClearField}>X</span>
+        </div>
+        <div className='btns'>
+          <button id='save' type='submit'>
+            Save
+          </button>
+          {contact.id && (
+            <button
+              id='delete'
+              type='button'
+              onClick={onContactDelete}
+            >
+              Delete
+            </button>
+          )}
+        </div>
+      </div>
+    </form>
+  );
+}
 
 export default ContactForm;

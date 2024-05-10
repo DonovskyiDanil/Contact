@@ -12,11 +12,6 @@
     max-width: 1000px; 
 }
 
-.contact-left, .contact-right {
-    width: 50%; 
-    border: 1px solid white;
-}
-
 .contacts {
     flex: 1;
     margin-right: 10px;
@@ -42,19 +37,18 @@
     top: 10px; 
     height: 50%;
     width: 30px; 
-    background-color: rgba(255, 230, 0, 0.616);
+    background-color: rgba(0, 255, 94, 0.616);
     cursor: pointer;
 }
 
-.new-button {
-    background-color: #0011ff;
+#new {
+    background-color: #001aff;
     color: white;
     padding: 10px;
     border: none;
     border-radius: 15px;
-    width: 80px;
+    width: 70px;
     cursor: pointer;
-    margin-top: 70px; 
-    margin-left: 20px;
+    margin-top: 65px;
+    margin-right: 20px;
 }
-
