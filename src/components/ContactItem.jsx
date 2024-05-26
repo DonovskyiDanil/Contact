@@ -4,10 +4,15 @@ import './ContactItem.css';
 function ContactItem({ contact, onSelect, onDelete }) {
   const fullName = `${contact.firstName || ''} ${contact.lastName || ''}`.trim();
 
+  const handleDelete = async () => {
+    console.log('Deleting contact with ID:', contact.id);
+    onDelete(contact.id);
+  };
+
   return (
     <div className="contact-item" onDoubleClick={() => onSelect(contact)}>
       <input type="text" value={fullName} readOnly />
-      <button onClick={() => onDelete(contact.id)}>X</button>
+      <button onClick={handleDelete}>X</button>
     </div>
   );
 }

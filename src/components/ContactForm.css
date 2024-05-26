@@ -1,67 +1,68 @@
 .contact-form {
     display: flex;
     flex-direction: column;
-    border: 1px solid white;
     padding: 5px;
     position: relative;
-    padding-bottom: 40px; 
-}
-
-
-.contact-info {
+    border: 1px solid white;
+    box-sizing: border-box;
+    transform: translateY(-5px);
+    height: 300px;
+  }
+  
+  .contact-info {
     position: relative;
     margin-bottom: 20px;
-}
-.contact-info input{
+  }
+  
+  .contact-info input {
     flex-grow: 1;
-    margin-bottom: -15px;
-    padding: 10px;
-    width: 200px; 
-}
-
-.contact-form .text-field {
-    width: 100%;
     padding: 10px;
     border: 1px solid #ced4da;
     border-radius: 4px;
     box-sizing: border-box;
-}
-#delete {
-    background-color: #001aff;
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 15px;
-    width: 70px;
-    cursor: pointer;
-    margin-top: 150px;
-    margin-right: 20px;
-}
-
-#save {
-    background-color: #001aff;
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 15px;
-    width: 70px;
-    cursor: pointer;
-    margin-top: 120px;
-    margin-right: 20px;
-}
-
-
-.clear {
+    width: 250px;
+  }
+  
+  .clear {
     position: absolute;
     right: 5px;
-    top: 60%;
-    transform: translateY(-40%);
-    background-color: rgba(0, 255, 94, 0.616);
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(51, 255, 0, 0.616);
     color: black;
     padding: 4px;
     border: none;
     cursor: pointer;
     width: 20px;
+    height: 20px;
     text-align: center;
- }
-    
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 30px;
+  }
+  
+  #save {
+    background-color: #001aff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    margin-right: 170px;
+    margin-top: 50px;
+  }
+  
+  #delete {
+    background-color: #001aff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    margin-top: 50px;
+    margin-left: -85px;
+  }
+  
