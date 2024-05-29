@@ -5,17 +5,14 @@ const ClearButton = ({ onClick }) => (
   <button className="clear" type="button" onClick={onClick}>X</button>
 );
 
-const ContactForm = ({ contactForEdit, onSubmit, onDelete, showDelete }) => {
+const ContactForm = ({ contactForEdit, onSubmit, onDelete }) => {
   const [contact, setContact] = useState({ firstName: '', lastName: '', email: '', phone: '' });
-  const [displayDeleteButton, setDisplayDeleteButton] = useState(false); 
 
   useEffect(() => {
     if (contactForEdit) {
       setContact(contactForEdit);
-      setDisplayDeleteButton(!!contactForEdit.id); 
     } else {
       setContact({ firstName: '', lastName: '', email: '', phone: '' });
-      setDisplayDeleteButton(false);
     }
   }, [contactForEdit]);
 
@@ -38,10 +35,8 @@ const ContactForm = ({ contactForEdit, onSubmit, onDelete, showDelete }) => {
     if (contact.id) {
       await onDelete(contact.id);
       setContact({ firstName: '', lastName: '', email: '', phone: '' });
-      setDisplayDeleteButton(false); 
     }
   };
-  
 
   return (
     <form className="contact-form" onSubmit={handleSubmit}>
@@ -91,7 +86,9 @@ const ContactForm = ({ contactForEdit, onSubmit, onDelete, showDelete }) => {
       </div>
       <div className="button-container">
         <button id="save" type="submit">Save</button>
-        {showDelete && displayDeleteButton && <button id="delete" type="button" onClick={handleDelete}>Delete</button>}
+        {contact.id && (
+          <button id="delete" type="button" onClick={handleDelete}>Delete</button>
+        )}
       </div>
     </form>
   );

@@ -7,7 +7,7 @@
   align-items: center;
   width: 100%;
   min-height: 100px;
-  background-color: inherit;
+  background-color: rgb(238, 233, 158);;
   border: 1px solid black;
 
 
@@ -17,7 +17,7 @@
     bottom: -1px; 
     left: 0;
     width: 100%;
-    height: 1px; 
+
     background-color: black; 
   }
 }
@@ -28,7 +28,6 @@
   align-items: center;
   padding: 20px;
   font-family: Arial, sans-serif;
-  background-color: rgb(238, 233, 158);
   min-height: 100vh;
   margin-bottom: -190px; 
 }
@@ -71,7 +70,6 @@
   flex-direction: column;
   padding: 5px;
   position: relative;
-  border: 1px solid white;
   box-sizing: border-box;
   transform: translateY(-5px);
   height: 300px;
