@@ -2,7 +2,7 @@ import React from 'react';
 import ContactItem from './ContactItem';
 import './ContactList.css';
 
-function ContactList({ contacts, onDelete, onEditContact, onAddContact }) {
+const ContactList = ({ contacts, onDelete, onEditContact, onAddContact }) => {
   return (
     <div className='list-container'>
       <div className='item-container'>
@@ -18,6 +18,6 @@ function ContactList({ contacts, onDelete, onEditContact, onAddContact }) {
       <button id='new' onClick={onAddContact}>New</button>
     </div>
   );
-}
+};
 
 export default ContactList;

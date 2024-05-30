@@ -18,13 +18,13 @@ const App = () => {
 
   const saveContact = async (contact) => {
     await dispatch(addContact(contact));
-    setContactForEdit(null); // Reset form after save
+    setContactForEdit(null); 
   };
 
   const deleteContact = async (id) => {
     await dispatch(removeContact(id));
     if (contactForEdit && contactForEdit.id === id) {
-      setContactForEdit(null); // Reset form if deleted contact was being edited
+      setContactForEdit(null); 
     }
   };
 

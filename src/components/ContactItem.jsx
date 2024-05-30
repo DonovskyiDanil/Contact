@@ -1,7 +1,7 @@
 import React from 'react';
 import './ContactItem.css';
 
-function ContactItem({ contact, onSelect, onDelete }) {
+const ContactItem = ({ contact, onSelect, onDelete }) => {
   const fullName = `${contact.firstName || ''} ${contact.lastName || ''}`.trim();
 
   const handleDelete = async () => {
@@ -15,6 +15,6 @@ function ContactItem({ contact, onSelect, onDelete }) {
       <button onClick={handleDelete}>X</button>
     </div>
   );
-}
+};
 
 export default ContactItem;
