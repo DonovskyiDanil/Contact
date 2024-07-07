@@ -1,11 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { addContact, updateContact, removeContact, clearEditContact } from '../redux/actions';
 import './ContactForm.css';
+import axiosInstance from '../axiosInstance'; // Поправленный путь к axiosInstance
 
 const ClearButton = ({ onClick }) => (
   <button className="clear" type="button" onClick={onClick}>X</button>
 );
 
-const ContactForm = ({ contactForEdit, onSubmit, onDelete }) => {
+const ContactForm = () => {
+  const dispatch = useDispatch();
+  const contactForEdit = useSelector((state) => state.contactForEdit);
   const [contact, setContact] = useState({ firstName: '', lastName: '', email: '', phone: '' });
 
   useEffect(() => {
@@ -27,14 +32,30 @@ const ContactForm = ({ contactForEdit, onSubmit, onDelete }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await onSubmit(contact);
-    setContact({ firstName: '', lastName: '', email: '', phone: '' });
+    try {
+      if (contact.id) {
+        const response = await axiosInstance.put(`/contacts/${contact.id}`, contact);
+        dispatch(updateContact(response.data));
+      } else {
+        const response = await axiosInstance.post('/contacts', contact);
+        dispatch(addContact(response.data));
+      }
+      setContact({ firstName: '', lastName: '', email: '', phone: '' });
+      dispatch(clearEditContact());
+    } catch (error) {
+      console.error('Error saving contact:', error);
+    }
   };
 
   const handleDelete = async () => {
-    if (contact.id) {
-      await onDelete(contact.id);
-      setContact({ firstName: '', lastName: '', email: '', phone: '' });
+    try {
+      if (contact.id) {
+        await axiosInstance.delete(`/contacts/${contact.id}`);
+        dispatch(removeContact(contact.id));
+        dispatch(clearEditContact());
+      }
+    } catch (error) {
+      console.error('Error deleting contact:', error);
     }
   };
 

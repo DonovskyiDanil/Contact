@@ -1,8 +1,8 @@
-import { applyMiddleware, createStore } from 'redux';
-import { thunk } from 'redux-thunk'; // изменить импорт на именованный импорт `thunk`
+import { createStore, applyMiddleware } from 'redux';
 import { createLogger } from 'redux-logger';
 import reducer from './reducer';
 
 const logger = createLogger();
-const store = createStore(reducer, applyMiddleware(thunk, logger));
+const store = createStore(reducer, applyMiddleware(logger));
+
 export default store;

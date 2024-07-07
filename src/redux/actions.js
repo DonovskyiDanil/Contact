@@ -1,41 +1,19 @@
-import axiosInstance from '../axiosInstance';
-
 export const FETCH_CONTACTS_REQUEST = 'FETCH_CONTACTS_REQUEST';
 export const FETCH_CONTACTS_SUCCESS = 'FETCH_CONTACTS_SUCCESS';
 export const FETCH_CONTACTS_FAILURE = 'FETCH_CONTACTS_FAILURE';
 export const ADD_CONTACT = 'ADD_CONTACT';
+export const UPDATE_CONTACT = 'UPDATE_CONTACT';
 export const REMOVE_CONTACT = 'REMOVE_CONTACT';
+export const SET_CONTACT_FOR_EDIT = 'SET_CONTACT_FOR_EDIT';
+export const CLEAR_EDIT_CONTACT = 'CLEAR_EDIT_CONTACT';
 
-export const fetchContacts = () => {
-  return async (dispatch) => {
-    dispatch({ type: FETCH_CONTACTS_REQUEST });
-    try {
-      const response = await axiosInstance.get('/contacts');
-      dispatch({ type: FETCH_CONTACTS_SUCCESS, payload: response.data });
-    } catch (error) {
-      dispatch({ type: FETCH_CONTACTS_FAILURE, error });
-    }
-  };
-};
+export const fetchContactsRequest = () => ({ type: FETCH_CONTACTS_REQUEST });
+export const fetchContactsSuccess = (contacts) => ({ type: FETCH_CONTACTS_SUCCESS, payload: contacts });
+export const fetchContactsFailure = (error) => ({ type: FETCH_CONTACTS_FAILURE, error });
 
-export const addContact = (contact) => {
-  return async (dispatch) => {
-    try {
-      const response = await axiosInstance.post('/contacts', contact);
-      dispatch({ type: ADD_CONTACT, payload: response.data });
-    } catch (error) {
-      console.error('Error adding contact:', error);
-    }
-  };
-};
+export const addContact = (contact) => ({ type: ADD_CONTACT, payload: contact });
+export const updateContact = (contact) => ({ type: UPDATE_CONTACT, payload: contact });
+export const removeContact = (id) => ({ type: REMOVE_CONTACT, payload: id });
 
-export const removeContact = (id) => {
-  return async (dispatch) => {
-    try {
-      await axiosInstance.delete(`/contacts/${id}`);
-      dispatch({ type: REMOVE_CONTACT, payload: id });
-    } catch (error) {
-      console.error('Error removing contact:', error);
-    }
-  };
-};
+export const setContactForEdit = (contact) => ({ type: SET_CONTACT_FOR_EDIT, payload: contact });
+export const clearEditContact = () => ({ type: CLEAR_EDIT_CONTACT });

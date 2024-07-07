@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchContacts, addContact, removeContact } from './redux/actions';
+import { fetchContactsRequest, fetchContactsSuccess, fetchContactsFailure, setContactForEdit, clearEditContact, addContact, updateContact, removeContact } from './redux/actions';
+import axiosInstance from './axiosInstance';
 import ContactForm from './components/ContactForm';
 import ContactList from './components/ContactList';
 import './App.css';
@@ -10,30 +11,55 @@ const App = () => {
   const contacts = useSelector((state) => state.contacts);
   const loading = useSelector((state) => state.loading);
   const error = useSelector((state) => state.error);
-  const [contactForEdit, setContactForEdit] = useState(null);
+  const contactForEdit = useSelector((state) => state.contactForEdit);
 
   useEffect(() => {
-    dispatch(fetchContacts());
+    const fetchContacts = async () => {
+      dispatch(fetchContactsRequest());
+      try {
+        const response = await axiosInstance.get('/contacts');
+        dispatch(fetchContactsSuccess(response.data));
+      } catch (error) {
+        dispatch(fetchContactsFailure(error));
+      }
+    };
+
+    fetchContacts();
   }, [dispatch]);
 
   const saveContact = async (contact) => {
-    await dispatch(addContact(contact));
-    setContactForEdit(null); // Reset form after save
+    try {
+      if (contact.id) {
+        const response = await axiosInstance.put(`/contacts/${contact.id}`, contact);
+        dispatch(updateContact(response.data));
+      } else {
+        const response = await axiosInstance.post('/contacts', contact);
+        dispatch(addContact(response.data));
+      }
+      dispatch(clearEditContact());
+    } catch (error) {
+      console.error('Error saving contact:', error);
+    }
   };
 
   const deleteContact = async (id) => {
-    await dispatch(removeContact(id));
-    if (contactForEdit && contactForEdit.id === id) {
-      setContactForEdit(null); // Reset form if deleted contact was being edited
+    try {
+      await axiosInstance.delete(`/contacts/${id}`);
+      dispatch(removeContact(id));
+      if (contactForEdit && contactForEdit.id === id) {
+        dispatch(clearEditContact());
+      }
+    } catch (error) {
+      console.error('Error deleting contact:', error);
     }
   };
 
   const addNewContact = () => {
-    setContactForEdit({ firstName: '', lastName: '', email: '', phone: '' });
+    dispatch(setContactForEdit({ firstName: '', lastName: '', email: '', phone: '' }));
   };
 
   const editContact = (contact) => {
-    setContactForEdit(contact);
+    dispatch(setContactForEdit(contact));
   };
 
   if (loading) return <p>Loading...</p>;
@@ -50,11 +76,7 @@ const App = () => {
             onAddContact={addNewContact}
             onEditContact={editContact}
           />
-          <ContactForm
-            contactForEdit={contactForEdit}
-            onSubmit={saveContact}
-            onDelete={deleteContact}
-          />
+          <ContactForm onSave={saveContact} /> {/* Example where saveContact is used */}
         </div>
       </div>
     </div>
