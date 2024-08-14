@@ -1,9 +1,7 @@
-// index.js
-
 import React from 'react';
-import { createRoot } from 'react-dom/client'; // Импорт из react-dom/client
+import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
-import store from './redux/store';
+import store from './components/store';
 import App from './App';
 import './index.css';
 

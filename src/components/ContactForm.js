@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addContact, updateContact, removeContact, clearEditContact } from '../redux/actions';
+import { addContact, updateContact, removeContact, clearEditContact } from './store/actions/contactsSlice';
+import axiosInstance from '../axiosInstance';
 import './ContactForm.css';
-import axiosInstance from '../axiosInstance'; // Поправленный путь к axiosInstance
 
 const ClearButton = ({ onClick }) => (
   <button className="clear" type="button" onClick={onClick}>X</button>
@@ -10,7 +10,7 @@ const ClearButton = ({ onClick }) => (
 
 const ContactForm = () => {
   const dispatch = useDispatch();
-  const contactForEdit = useSelector((state) => state.contactForEdit);
+  const contactForEdit = useSelector((state) => state.contacts.contactForEdit);
   const [contact, setContact] = useState({ firstName: '', lastName: '', email: '', phone: '' });
 
   useEffect(() => {
